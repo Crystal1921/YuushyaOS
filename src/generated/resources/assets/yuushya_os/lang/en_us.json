@@ -1,4 +1,12 @@
 {
   "item.yuushya_os.panel_item": "Creative Shop Panel",
-  "yuushya_os.panel": "Creative Shop Panel"
+  "yuushya_os.building_materials": "Building Materials",
+  "yuushya_os.favorites": "Favorites",
+  "yuushya_os.food": "Food",
+  "yuushya_os.furniture": "Furniture",
+  "yuushya_os.local": "Local",
+  "yuushya_os.panel": "Creative Shop Panel",
+  "yuushya_os.search_bar": "Search Bar",
+  "yuushya_os.server": "Server",
+  "yuushya_os.upload": "Upload"
 }

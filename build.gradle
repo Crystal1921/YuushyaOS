@@ -100,6 +100,9 @@ configurations {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+
     implementation "maven.modrinth:architectury-api:13.0.8+neoforge"
     implementation "maven.modrinth:yuushya-townscape:tP3bW7cj"
     implementation "maven.modrinth:yuushya-modelling:2.4.0"

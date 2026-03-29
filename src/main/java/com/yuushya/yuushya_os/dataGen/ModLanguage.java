@@ -29,6 +29,14 @@ public class ModLanguage implements DataProvider {
         this.add(ItemRegistry.PANEL_ITEM.get(), "Creative Shop Panel", "创意工坊面板");
 
         this.add("yuushya_os.panel", "Creative Shop Panel", "创意工坊面板");
+        this.add("yuushya_os.local", "Local", "本地");
+        this.add("yuushya_os.favorites", "Favorites", "收藏夹");
+        this.add("yuushya_os.server", "Server", "服务器");
+        this.add("yuushya_os.upload", "Upload", "上传");
+        this.add("yuushya_os.search_bar", "Search Bar", "搜索栏");
+        this.add("yuushya_os.building_materials", "Building Materials", "建材");
+        this.add("yuushya_os.furniture", "Furniture", "家具");
+        this.add("yuushya_os.food", "Food", "食物");
 
     }
 

@@ -1,4 +1,12 @@
 {
   "item.yuushya_os.panel_item": "创意工坊面板",
-  "yuushya_os.panel": "创意工坊面板"
+  "yuushya_os.building_materials": "建材",
+  "yuushya_os.favorites": "收藏夹",
+  "yuushya_os.food": "食物",
+  "yuushya_os.furniture": "家具",
+  "yuushya_os.local": "本地",
+  "yuushya_os.panel": "创意工坊面板",
+  "yuushya_os.search_bar": "搜索栏",
+  "yuushya_os.server": "服务器",
+  "yuushya_os.upload": "上传"
 }
