@@ -4,16 +4,19 @@ import com.yuushya.modelling.gui.engrave.EngraveBlockResultLoader;
 import com.yuushya.modelling.gui.engrave.EngraveItemResultLoader;
 import com.yuushya.yuushya_os.YuushyaOS;
 import com.yuushya.yuushya_os.gui.widget.ItemButton;
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,15 +25,17 @@ import java.util.Map;
 public class CreativeWorkshopScreen extends Screen {
     public static final int WIDTH = 320;
     public static final int HEIGHT = 160;
-    public static final int BUTTON_INTERVAL = 38;
+    public static final int BUTTON_INTERVAL = 60;
     public static final int BUTTON_WIDTH = 28;
     public static final int BUTTON_HEIGHT = 14;
     public int page = 0;
+    private TabButton currentTab = TabButton.LOCAL;
 
     List<ItemInfo> favoriteItems = new ArrayList<>();
 
     Map<String, ItemInfo> itemInfoMap = new HashMap<>();
     List<ItemButton> itemButtons = new ArrayList<>();
+    EditBox searchBox;
 
     public CreativeWorkshopScreen() {
         super(Component.literal("Creative Workshop"));
@@ -44,20 +49,11 @@ public class CreativeWorkshopScreen extends Screen {
         int heightCenter = this.height / 2;
 
         int leftPos = 72;
-        Button localButton = Button.builder(Component.translatable("yuushya_os.local"), (button -> onLocalButtonClick()))
-                .bounds(widthCenter - leftPos, heightCenter - 75, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .build();
 
-        Button favoritesButton = Button.builder(Component.translatable("yuushya_os.favorites"), (button -> onFavoritesButtonClick()))
-                .bounds(widthCenter - leftPos + BUTTON_INTERVAL, heightCenter - 75, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .build();
-
-        Button serverButton = Button.builder(Component.translatable("yuushya_os.server"), (button -> onServerButtonClick()))
-                .bounds(widthCenter - leftPos + BUTTON_INTERVAL * 2, heightCenter - 75, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .build();
-        Button uploadButton = Button.builder(Component.translatable("yuushya_os.upload"), (button -> onUploadButtonClick()))
-                .bounds(widthCenter - leftPos + BUTTON_INTERVAL * 3, heightCenter - 75, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .build();
+        // Create tab buttons using enum
+        for (TabButton tabButton : TabButton.values()) {
+            this.addRenderableWidget(tabButton.createButton(widthCenter, heightCenter, leftPos, this));
+        }
 
         Button exitButton = Button.builder(Component.literal("x"), (button -> this.onClose()))
                 .bounds(widthCenter + WIDTH / 2 - BUTTON_WIDTH, heightCenter - HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT)
@@ -79,33 +75,48 @@ public class CreativeWorkshopScreen extends Screen {
                 .bounds(widthCenter + WIDTH / 2 - BUTTON_HEIGHT * 4, heightCenter + HEIGHT / 2 - BUTTON_HEIGHT, BUTTON_HEIGHT, BUTTON_HEIGHT)
                 .build();
 
-        this.addRenderableWidget(localButton);
-        this.addRenderableWidget(favoritesButton);
-        this.addRenderableWidget(serverButton);
-        this.addRenderableWidget(uploadButton);
+        searchBox = new EditBox(font, widthCenter + WIDTH / 2 - 80, heightCenter - HEIGHT / 2 + 20, 80, BUTTON_HEIGHT, Component.literal("Search..."));
+        searchBox.setResponder(text -> {
+            // Implement search functionality here
+        });
+
+        onTabButtonClick(this.currentTab);
+
         this.addRenderableWidget(exitButton);
         this.addRenderableWidget(nextPageButton);
         this.addRenderableWidget(prevPageButton);
+        this.addRenderableWidget(searchBox);
+    }
+
+    private void onTabButtonClick(TabButton tabButton) {
+        if (tabButton == TabButton.UPLOAD) {
+            Minecraft minecraft = Minecraft.getInstance();
+            minecraft.setScreen(new UploadScreen(this));
+            return;
+        }
+        this.itemInfoMap.clear();
+        this.page = 0;
+        this.currentTab = tabButton;
+        switch (tabButton) {
+            case LOCAL -> onLocalButtonClick();
+            case FAVORITES -> onFavoritesButtonClick();
+            case SERVER -> onServerButtonClick();
+        }
+
+        refreshPage();
     }
 
     private void onLocalButtonClick() {
-        this.itemInfoMap.clear();
-        this.page = 0;
         EngraveBlockResultLoader.SHOWBLOCK_ITEM_MAP.forEach((key, value) ->
                 this.itemInfoMap.put(key, new ItemInfo(value.getResultItem(), value.getName(), "Local")));
         EngraveItemResultLoader.ITEMBLOCK_ITEM_MAP.forEach((key, value) ->
                 this.itemInfoMap.put(key, new ItemInfo(value.getResultItem(), value.getName(), "Local")));
-
-        refreshPage();
     }
 
     private void onFavoritesButtonClick() {
-        this.itemInfoMap.clear();
-        this.page = 0;
         this.favoriteItems.forEach(itemInfo -> {
             this.itemInfoMap.put(itemInfo.name, itemInfo);
         });
-        refreshPage();
     }
 
     private void onServerButtonClick() {
@@ -130,8 +141,8 @@ public class CreativeWorkshopScreen extends Screen {
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        Minecraft mc = Minecraft.getInstance();
         ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(YuushyaOS.MODID, "textures/gui/test.png");
-
         int widthCenter = this.width / 2;
         int heightCenter = this.height / 2;
         guiGraphics.blit(resourceLocation, widthCenter - WIDTH / 2, heightCenter - HEIGHT / 2, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
@@ -147,5 +158,30 @@ public class CreativeWorkshopScreen extends Screen {
 
     public record ItemInfo(ItemStack itemStack, String name, String author) {
 
+    }
+
+    @Getter
+    private enum TabButton {
+        LOCAL("yuushya_os.local", 0),
+        FAVORITES("yuushya_os.favorites", 1),
+        SERVER("yuushya_os.server", 2),
+        UPLOAD("yuushya_os.upload", 3);
+
+        private final String translationKey;
+        private final int index;
+
+        TabButton(String translationKey, int index) {
+            this.translationKey = translationKey;
+            this.index = index;
+        }
+
+        public Button createButton(int widthCenter, int heightCenter, int leftPos, CreativeWorkshopScreen screen) {
+            return Button.builder(
+                    Component.translatable(translationKey),
+                    button -> screen.onTabButtonClick(this)
+                )
+                .bounds(widthCenter - leftPos + BUTTON_INTERVAL * index, heightCenter - 75, BUTTON_WIDTH, BUTTON_HEIGHT)
+                .build();
+        }
     }
 }

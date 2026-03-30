@@ -12,14 +12,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemDisplayContext;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.function.Supplier;
 
 public class ItemButton extends Button {
     protected static final CreateNarration DEFAULT_NARRATION = Supplier::get;
+    public static final int WIDTH = 50;
     private final CreativeWorkshopScreen.ItemInfo itemInfo;
 
     public ItemButton(CreativeWorkshopScreen.ItemInfo itemInfo, int x, int y, Component message) {
-        super(x, y, 32, 32, message, ItemButton::onPress, DEFAULT_NARRATION);
+        super(x, y, WIDTH, WIDTH, message, ItemButton::onPress, DEFAULT_NARRATION);
         this.itemInfo = itemInfo;
     }
 
@@ -29,16 +31,17 @@ public class ItemButton extends Button {
     }
 
     protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        Minecraft mc = Minecraft.getInstance();
         if (!itemInfo.itemStack().isEmpty()) {
             guiGraphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0xFF000000); // 绘制背景
             PoseStack pose = guiGraphics.pose();
             pose.pushPose();
-            pose.translate(this.getX() + 16,this.getY() + 16,10);
+            pose.translate(this.getX() + 25,this.getY() + 25,10);
             pose.scale(16.0f, -16.0f, 16.0f);
-            Minecraft mc = Minecraft.getInstance();
             ClientLevel level = mc.level;
-            Minecraft.getInstance().getItemRenderer().renderStatic(this.itemInfo.itemStack(), ItemDisplayContext.GUI, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, pose, guiGraphics.bufferSource(), level, 0);
+            mc.getItemRenderer().renderStatic(this.itemInfo.itemStack(), ItemDisplayContext.GUI, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, pose, guiGraphics.bufferSource(), level, 0);
             pose.popPose();
+            guiGraphics.drawString(mc.font, itemInfo.name(), this.getX(),this.getY(), Color.WHITE.getRGB());
         }
     }
 }
