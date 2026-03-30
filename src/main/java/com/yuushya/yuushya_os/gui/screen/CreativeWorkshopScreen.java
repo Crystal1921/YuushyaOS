@@ -137,6 +137,7 @@ public class CreativeWorkshopScreen extends Screen {
             if (i >= page * 6 && i < (page + 1) * 6) {
                 ItemInfo itemInfo = itemInfos.get(i);
                 ItemButton itemButton = new ItemButton(
+                        this,
                         itemInfo,
                         this.width / 2 - 72 + (i % 6) * ITEM_INTERVAL,
                         this.height / 2 - 35,  // 调整 y 坐标以适应新的高度
@@ -163,7 +164,6 @@ public class CreativeWorkshopScreen extends Screen {
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        Minecraft mc = Minecraft.getInstance();
         ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(YuushyaOS.MODID, "textures/gui/test.png");
         int widthCenter = this.width / 2;
         int heightCenter = this.height / 2;

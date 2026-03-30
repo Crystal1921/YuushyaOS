@@ -2,6 +2,7 @@ package com.yuushya.yuushya_os.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen;
+import com.yuushya.yuushya_os.gui.screen.ItemShowScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -18,26 +19,27 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ItemButton extends Button {
-    protected static final CreateNarration DEFAULT_NARRATION = Supplier::get;
     public static final int WIDTH = 50;
     public static final int NAME_HEIGHT = 10;  // 上方名字区域高度
     public static final int ITEM_SIZE = 40;    // 中间物品区域高度
     public static final int FAVORITE_HEIGHT = 10;  // 下方收藏按钮高度
     public static final int TOTAL_HEIGHT = NAME_HEIGHT + ITEM_SIZE + FAVORITE_HEIGHT;  // 总高度 60
-
+    protected static final CreateNarration DEFAULT_NARRATION = Supplier::get;
     // 收藏状态颜色常量
     private static final int FAVORITED_COLOR = 0xFFFF6B6B;  // 已收藏：红色
     private static final int UNFAVORITED_COLOR = 0xFF888888;  // 未收藏：灰色
     private static final int HOVER_COLOR = 0xFFFF9999;  // 悬停时：浅红色
 
+    private final CreativeWorkshopScreen parent;
     private final CreativeWorkshopScreen.ItemInfo itemInfo;
     private final Consumer<CreativeWorkshopScreen.ItemInfo> favoriteCallback;
     private final Supplier<Boolean> isFavoritedSupplier;
 
-    public ItemButton(CreativeWorkshopScreen.ItemInfo itemInfo, int x, int y, Component message,
+    public ItemButton(CreativeWorkshopScreen parent, CreativeWorkshopScreen.ItemInfo itemInfo, int x, int y, Component message,
                       Consumer<CreativeWorkshopScreen.ItemInfo> favoriteCallback,
                       Supplier<Boolean> isFavoritedSupplier) {
         super(x, y, WIDTH, TOTAL_HEIGHT, message, ItemButton::onPress, DEFAULT_NARRATION);
+        this.parent = parent;
         this.itemInfo = itemInfo;
         this.favoriteCallback = favoriteCallback;
         this.isFavoritedSupplier = isFavoritedSupplier;
@@ -51,12 +53,19 @@ public class ItemButton extends Button {
     @Override
     public void onClick(double mouseX, double mouseY) {
         // 检查是否点击了收藏按钮区域（底部 10 像素）
+        int showAreaY = this.getY() + NAME_HEIGHT;  // 显示物品的区域起始 Y 坐标
         int favoriteAreaY = this.getY() + NAME_HEIGHT + ITEM_SIZE;
         if (mouseX >= this.getX() && mouseX < this.getX() + this.width &&
-            mouseY >= favoriteAreaY && mouseY < favoriteAreaY + FAVORITE_HEIGHT) {
+                mouseY >= favoriteAreaY && mouseY < favoriteAreaY + FAVORITE_HEIGHT) {
             if (favoriteCallback != null) {
                 favoriteCallback.accept(itemInfo);
+                return;
             }
+        }
+        if (mouseX >= getX() && mouseX < this.getX() + this.width &&
+                mouseY >= showAreaY && mouseY < showAreaY + ITEM_SIZE) {
+            Minecraft mc = Minecraft.getInstance();
+            mc.setScreen(new ItemShowScreen(parent, this.itemInfo));
         }
     }
 
@@ -87,7 +96,7 @@ public class ItemButton extends Button {
             // 4. 下面 10 像素：绘制收藏按钮
             int favoriteY = this.getY() + NAME_HEIGHT + ITEM_SIZE;
             boolean isHovered = mouseX >= this.getX() && mouseX < this.getX() + this.width &&
-                               mouseY >= favoriteY && mouseY < favoriteY + FAVORITE_HEIGHT;
+                    mouseY >= favoriteY && mouseY < favoriteY + FAVORITE_HEIGHT;
             boolean isFavorite = isFavoritedSupplier != null && isFavoritedSupplier.get();
 
             // 根据收藏状态和悬停状态选择颜色
@@ -105,7 +114,7 @@ public class ItemButton extends Button {
             int favoriteTextX = this.getX() + (this.width - favoriteTextWidth) / 2;
             // 已收藏时显示白色，未收藏时显示浅灰色
             int textColor = isFavorite || isHovered ? Color.WHITE.getRGB() : 0xFFCCCCCC;
-            guiGraphics.drawString(font, favoriteText, favoriteTextX, favoriteY + 1, textColor);
+            guiGraphics.drawString(font, favoriteText, favoriteTextX, favoriteY + 1, textColor, false);
         }
     }
 }
