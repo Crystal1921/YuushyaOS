@@ -119,9 +119,7 @@ public class CreativeWorkshopScreen extends Screen {
     }
 
     private void onFavoritesButtonClick() {
-        this.favoriteItems.forEach(itemInfo -> {
-            this.itemInfoMap.put(itemInfo.name, itemInfo);
-        });
+        this.favoriteItems.forEach(itemInfo -> this.itemInfoMap.put(itemInfo.name, itemInfo));
     }
 
     private void onServerButtonClick() {
@@ -143,7 +141,8 @@ public class CreativeWorkshopScreen extends Screen {
                         this.width / 2 - 72 + (i % 6) * ITEM_INTERVAL,
                         this.height / 2 - 35,  // 调整 y 坐标以适应新的高度
                         Component.literal(itemInfo.name()),
-                        this::toggleFavorite  // 收藏回调
+                        this::toggleFavorite,  // 收藏回调
+                        () -> favoriteItems.contains(itemInfo)  // 收藏状态检查
                 );
                 this.itemButtons.add(itemButton);
             }

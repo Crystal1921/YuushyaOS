@@ -25,13 +25,22 @@ public class ItemButton extends Button {
     public static final int FAVORITE_HEIGHT = 10;  // 下方收藏按钮高度
     public static final int TOTAL_HEIGHT = NAME_HEIGHT + ITEM_SIZE + FAVORITE_HEIGHT;  // 总高度 60
 
+    // 收藏状态颜色常量
+    private static final int FAVORITED_COLOR = 0xFFFF6B6B;  // 已收藏：红色
+    private static final int UNFAVORITED_COLOR = 0xFF888888;  // 未收藏：灰色
+    private static final int HOVER_COLOR = 0xFFFF9999;  // 悬停时：浅红色
+
     private final CreativeWorkshopScreen.ItemInfo itemInfo;
     private final Consumer<CreativeWorkshopScreen.ItemInfo> favoriteCallback;
+    private final Supplier<Boolean> isFavoritedSupplier;
 
-    public ItemButton(CreativeWorkshopScreen.ItemInfo itemInfo, int x, int y, Component message, Consumer<CreativeWorkshopScreen.ItemInfo> favoriteCallback) {
+    public ItemButton(CreativeWorkshopScreen.ItemInfo itemInfo, int x, int y, Component message,
+                      Consumer<CreativeWorkshopScreen.ItemInfo> favoriteCallback,
+                      Supplier<Boolean> isFavoritedSupplier) {
         super(x, y, WIDTH, TOTAL_HEIGHT, message, ItemButton::onPress, DEFAULT_NARRATION);
         this.itemInfo = itemInfo;
         this.favoriteCallback = favoriteCallback;
+        this.isFavoritedSupplier = isFavoritedSupplier;
     }
 
     private static void onPress(Button button) {
@@ -79,16 +88,24 @@ public class ItemButton extends Button {
             int favoriteY = this.getY() + NAME_HEIGHT + ITEM_SIZE;
             boolean isHovered = mouseX >= this.getX() && mouseX < this.getX() + this.width &&
                                mouseY >= favoriteY && mouseY < favoriteY + FAVORITE_HEIGHT;
+            boolean isFavorite = isFavoritedSupplier != null && isFavoritedSupplier.get();
 
-            // 收藏按钮背景（鼠标悬停时变色）
-            int favoriteColor = isHovered ? 0xFFFF6B6B : 0xFF888888;
+            // 根据收藏状态和悬停状态选择颜色
+            int favoriteColor;
+            if (isHovered) {
+                favoriteColor = HOVER_COLOR;  // 悬停时统一显示浅红色
+            } else {
+                favoriteColor = isFavorite ? FAVORITED_COLOR : UNFAVORITED_COLOR;
+            }
             guiGraphics.fill(this.getX(), favoriteY, this.getX() + this.width, favoriteY + FAVORITE_HEIGHT, favoriteColor);
 
             // 收藏按钮文字（♥）
             String favoriteText = "♥";
             int favoriteTextWidth = font.width(favoriteText);
             int favoriteTextX = this.getX() + (this.width - favoriteTextWidth) / 2;
-            guiGraphics.drawString(font, favoriteText, favoriteTextX, favoriteY + 1, Color.WHITE.getRGB());
+            // 已收藏时显示白色，未收藏时显示浅灰色
+            int textColor = isFavorite || isHovered ? Color.WHITE.getRGB() : 0xFFCCCCCC;
+            guiGraphics.drawString(font, favoriteText, favoriteTextX, favoriteY + 1, textColor);
         }
     }
 }
