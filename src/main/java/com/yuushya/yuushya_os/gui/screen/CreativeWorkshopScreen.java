@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,17 +24,16 @@ import java.util.Map;
 public class CreativeWorkshopScreen extends Screen {
     public static final int WIDTH = 320;
     public static final int HEIGHT = 160;
-    public static final int BUTTON_INTERVAL = 60;
+    public static final int BUTTON_INTERVAL = 38;
+    public static final int ITEM_INTERVAL = 60;
     public static final int BUTTON_WIDTH = 28;
     public static final int BUTTON_HEIGHT = 14;
     public int page = 0;
-    private TabButton currentTab = TabButton.LOCAL;
-
     List<ItemInfo> favoriteItems = new ArrayList<>();
-
     Map<String, ItemInfo> itemInfoMap = new HashMap<>();
     List<ItemButton> itemButtons = new ArrayList<>();
     EditBox searchBox;
+    private TabButton currentTab = TabButton.LOCAL;
 
     public CreativeWorkshopScreen() {
         super(Component.literal("Creative Workshop"));
@@ -88,6 +86,13 @@ public class CreativeWorkshopScreen extends Screen {
         this.addRenderableWidget(searchBox);
     }
 
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        for (ItemButton itemButton : itemButtons) {
+            itemButton.onClick(mouseX, mouseY, button);
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
     private void onTabButtonClick(TabButton tabButton) {
         if (tabButton == TabButton.UPLOAD) {
             Minecraft minecraft = Minecraft.getInstance();
@@ -133,9 +138,27 @@ public class CreativeWorkshopScreen extends Screen {
         for (int i = 0; i < itemInfos.size(); i++) {
             if (i >= page * 6 && i < (page + 1) * 6) {
                 ItemInfo itemInfo = itemInfos.get(i);
-                ItemButton itemButton = new ItemButton(itemInfo, this.width / 2 - 72 + (i % 6) * BUTTON_INTERVAL, this.height / 2 - 30, Component.literal(itemInfo.name()));
+                ItemButton itemButton = new ItemButton(
+                        itemInfo,
+                        this.width / 2 - 72 + (i % 6) * ITEM_INTERVAL,
+                        this.height / 2 - 35,  // 调整 y 坐标以适应新的高度
+                        Component.literal(itemInfo.name()),
+                        this::toggleFavorite  // 收藏回调
+                );
                 this.itemButtons.add(itemButton);
             }
+        }
+    }
+
+    private void toggleFavorite(ItemInfo itemInfo) {
+        if (favoriteItems.contains(itemInfo)) {
+            favoriteItems.remove(itemInfo);
+        } else {
+            favoriteItems.add(itemInfo);
+        }
+        // 如果当前在收藏夹标签页，刷新显示
+        if (this.currentTab == TabButton.FAVORITES) {
+            onTabButtonClick(TabButton.FAVORITES);
         }
     }
 
@@ -156,10 +179,6 @@ public class CreativeWorkshopScreen extends Screen {
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
     }
 
-    public record ItemInfo(ItemStack itemStack, String name, String author) {
-
-    }
-
     @Getter
     private enum TabButton {
         LOCAL("yuushya_os.local", 0),
@@ -177,11 +196,15 @@ public class CreativeWorkshopScreen extends Screen {
 
         public Button createButton(int widthCenter, int heightCenter, int leftPos, CreativeWorkshopScreen screen) {
             return Button.builder(
-                    Component.translatable(translationKey),
-                    button -> screen.onTabButtonClick(this)
-                )
-                .bounds(widthCenter - leftPos + BUTTON_INTERVAL * index, heightCenter - 75, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .build();
+                            Component.translatable(translationKey),
+                            button -> screen.onTabButtonClick(this)
+                    )
+                    .bounds(widthCenter - leftPos + BUTTON_INTERVAL * index, heightCenter - 75, BUTTON_WIDTH, BUTTON_HEIGHT)
+                    .build();
         }
+    }
+
+    public record ItemInfo(ItemStack itemStack, String name, String author) {
+
     }
 }
