@@ -34,7 +34,7 @@ public class ItemButton extends Button {
             PoseStack pose = guiGraphics.pose();
             pose.pushPose();
             pose.translate(this.getX() + 16,this.getY() + 16,10);
-            pose.scale(32.0f, -32.0f, 32.0f);
+            pose.scale(16.0f, -16.0f, 16.0f);
             Minecraft mc = Minecraft.getInstance();
             ClientLevel level = mc.level;
             Minecraft.getInstance().getItemRenderer().renderStatic(this.itemInfo.itemStack(), ItemDisplayContext.GUI, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, pose, guiGraphics.bufferSource(), level, 0);
