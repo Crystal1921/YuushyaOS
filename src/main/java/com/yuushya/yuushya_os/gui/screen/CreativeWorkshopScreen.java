@@ -35,6 +35,7 @@ public class CreativeWorkshopScreen extends Screen {
     List<ItemButton> itemButtons = new ArrayList<>();
     EditBox searchBox;
     private TabButton currentTab = TabButton.LOCAL;
+    private boolean needsRefresh = false;  // 延迟刷新标志
 
     public CreativeWorkshopScreen() {
         super(Component.literal("Creative Workshop"));
@@ -88,8 +89,14 @@ public class CreativeWorkshopScreen extends Screen {
     }
 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        for (ItemButton itemButton : itemButtons) {
+        // 使用副本遍历，避免在遍历过程中列表被修改
+        for (ItemButton itemButton : new ArrayList<>(itemButtons)) {
             itemButton.onClick(mouseX, mouseY, button);
+        }
+        // 在所有点击事件处理完成后，检查是否需要刷新
+        if (needsRefresh) {
+            needsRefresh = false;
+            refreshPage();
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
@@ -157,9 +164,13 @@ public class CreativeWorkshopScreen extends Screen {
         } else {
             favoriteItems.add(itemInfo);
         }
-        // 如果当前在收藏夹标签页，刷新显示
+        // 如果当前在收藏夹标签页，标记需要刷新（延迟到 mouseClicked 结束后执行）
         if (this.currentTab == TabButton.FAVORITES) {
-            onTabButtonClick(TabButton.FAVORITES);
+            // 更新 itemInfoMap 以反映收藏状态变化
+            this.itemInfoMap.clear();
+            this.favoriteItems.forEach(item -> this.itemInfoMap.put(item.name(), item));
+            // 设置刷新标志，让 mouseClicked 在处理完所有事件后刷新
+            needsRefresh = true;
         }
     }
 
