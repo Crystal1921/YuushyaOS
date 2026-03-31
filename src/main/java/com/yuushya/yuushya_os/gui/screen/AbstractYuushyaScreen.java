@@ -6,7 +6,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 
 import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.*;
 
@@ -22,7 +21,8 @@ public abstract class AbstractYuushyaScreen extends Screen {
 
     /**
      * 构造函数
-     * @param title 界面标题
+     *
+     * @param title  界面标题
      * @param parent 父界面，可以为 null（对于主界面 CreativeWorkshopScreen）
      */
     protected AbstractYuushyaScreen(Component title, CreativeWorkshopScreen parent) {
@@ -42,16 +42,6 @@ public abstract class AbstractYuushyaScreen extends Screen {
                 .bounds(widthCenter + WIDTH / 2 - BUTTON_WIDTH, heightCenter - HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .build();
         this.addRenderableWidget(exitButton);
-
-        // 调用子类的初始化方法
-        this.initScreen();
-    }
-
-    /**
-     * 子类特定的初始化逻辑，在通用初始化之后调用
-     */
-    protected void initScreen() {
-
     }
 
     @Override
