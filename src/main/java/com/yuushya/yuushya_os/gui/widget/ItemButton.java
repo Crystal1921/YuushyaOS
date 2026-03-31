@@ -1,6 +1,7 @@
 package com.yuushya.yuushya_os.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yuushya.yuushya_os.YuushyaOS;
 import com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen;
 import com.yuushya.yuushya_os.gui.screen.ItemShowScreen;
 import net.minecraft.client.Minecraft;
@@ -11,6 +12,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +31,8 @@ public class ItemButton extends Button {
     private static final int FAVORITED_COLOR = 0xFFFF6B6B;  // 已收藏：红色
     private static final int UNFAVORITED_COLOR = 0xFF888888;  // 未收藏：灰色
     private static final int HOVER_COLOR = 0xFFFF9999;  // 悬停时：浅红色
+    public static final ResourceLocation ITEM = ResourceLocation.fromNamespaceAndPath(YuushyaOS.MODID, "textures/gui/item.png");
+    public static final ResourceLocation BLOCK = ResourceLocation.fromNamespaceAndPath(YuushyaOS.MODID, "textures/gui/block.png");
 
     private final CreativeWorkshopScreen parent;
     private final CreativeWorkshopScreen.ItemInfo itemInfo;
@@ -92,6 +96,11 @@ public class ItemButton extends Button {
             ClientLevel level = mc.level;
             mc.getItemRenderer().renderStatic(this.itemInfo.itemStack(), ItemDisplayContext.GUI, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, pose, guiGraphics.bufferSource(), level, 0);
             pose.popPose();
+
+            switch (itemInfo.itemType()) {
+                case CreativeWorkshopScreen.ItemType.ITEMBLOCK -> guiGraphics.blit(ITEM, this.getX(), itemY, 0, 0, 11, 11,11,11);
+                case CreativeWorkshopScreen.ItemType.SHOWBLOCK -> guiGraphics.blit(BLOCK, this.getX(), itemY, 0, 0, 11, 11,11,11);
+            }
 
             // 4. 下面 10 像素：绘制收藏按钮
             int favoriteY = this.getY() + NAME_HEIGHT + ITEM_SIZE;

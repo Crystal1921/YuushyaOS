@@ -28,6 +28,7 @@ public class CreativeWorkshopScreen extends Screen {
     public static final int ITEM_INTERVAL = 60;
     public static final int BUTTON_WIDTH = 28;
     public static final int BUTTON_HEIGHT = 14;
+    public static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(YuushyaOS.MODID, "textures/gui/test.png");
     public int page = 0;
     List<ItemInfo> favoriteItems = new ArrayList<>();
     Map<String, ItemInfo> itemInfoMap = new HashMap<>();
@@ -113,9 +114,9 @@ public class CreativeWorkshopScreen extends Screen {
 
     private void onLocalButtonClick() {
         EngraveBlockResultLoader.SHOWBLOCK_ITEM_MAP.forEach((key, value) ->
-                this.itemInfoMap.put(key, new ItemInfo(value.getResultItem(), value.getName(), "Local")));
+                this.itemInfoMap.put(key, new ItemInfo(value.getResultItem(), value.getName(), "Local", ItemType.SHOWBLOCK)));
         EngraveItemResultLoader.ITEMBLOCK_ITEM_MAP.forEach((key, value) ->
-                this.itemInfoMap.put(key, new ItemInfo(value.getResultItem(), value.getName(), "Local")));
+                this.itemInfoMap.put(key, new ItemInfo(value.getResultItem(), value.getName(), "Local", ItemType.ITEMBLOCK)));
     }
 
     private void onFavoritesButtonClick() {
@@ -164,10 +165,9 @@ public class CreativeWorkshopScreen extends Screen {
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(YuushyaOS.MODID, "textures/gui/test.png");
         int widthCenter = this.width / 2;
         int heightCenter = this.height / 2;
-        guiGraphics.blit(resourceLocation, widthCenter - WIDTH / 2, heightCenter - HEIGHT / 2, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
+        guiGraphics.blit(BG, widthCenter - WIDTH / 2, heightCenter - HEIGHT / 2, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
 
         itemButtons.forEach(button -> button.render(guiGraphics, mouseX, mouseY, partialTick));
 
@@ -203,7 +203,15 @@ public class CreativeWorkshopScreen extends Screen {
         }
     }
 
-    public record ItemInfo(ItemStack itemStack, String name, String author) {
+    /**
+     * 物品信息类型枚举，用于区分物品来源
+     */
+    public enum ItemType {
+        SHOWBLOCK,  // 来自 SHOWBLOCK_ITEM_MAP
+        ITEMBLOCK   // 来自 ITEMBLOCK_ITEM_MAP
+    }
+
+    public record ItemInfo(ItemStack itemStack, String name, String author, ItemType itemType) {
 
     }
 }
