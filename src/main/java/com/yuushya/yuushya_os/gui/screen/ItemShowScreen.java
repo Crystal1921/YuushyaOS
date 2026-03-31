@@ -37,6 +37,7 @@ public class ItemShowScreen extends AbstractYuushyaScreen {
         pose.translate(widthCenter, heightCenter, 10);
         pose.scale(16.0f, -16.0f, 16.0f);
         Minecraft.getInstance().getItemRenderer().renderStatic(this.itemInfo.itemStack(), ItemDisplayContext.GUI, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, pose, guiGraphics.bufferSource(), level, 0);
+        pose.popPose();
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
     }
