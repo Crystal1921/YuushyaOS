@@ -32,6 +32,7 @@ public class CreativeWorkshopScreen extends Screen {
     public int page = 0;
     List<ItemInfo> favoriteItems = new ArrayList<>();
     Map<String, ItemInfo> itemInfoMap = new HashMap<>();
+    Map<String, ItemInfo> allItemsMap = new HashMap<>();  // 保存当前标签页的完整物品列表
     List<ItemButton> itemButtons = new ArrayList<>();
     EditBox searchBox;
     private TabButton currentTab = TabButton.LOCAL;
@@ -77,7 +78,7 @@ public class CreativeWorkshopScreen extends Screen {
 
         searchBox = new EditBox(font, widthCenter + WIDTH / 2 - 80, heightCenter - HEIGHT / 2 + 20, 80, BUTTON_HEIGHT, Component.literal("Search..."));
         searchBox.setResponder(text -> {
-            // Implement search functionality here
+            filterItems(text);
         });
 
         onTabButtonClick(this.currentTab);
@@ -108,13 +109,21 @@ public class CreativeWorkshopScreen extends Screen {
             return;
         }
         this.itemInfoMap.clear();
+        this.allItemsMap.clear();
         this.page = 0;
         this.currentTab = tabButton;
+
+        // 清空搜索框
+        searchBox.setValue("");
+
         switch (tabButton) {
             case LOCAL -> onLocalButtonClick();
             case FAVORITES -> onFavoritesButtonClick();
             case SERVER -> onServerButtonClick();
         }
+
+        // 保存完整物品列表
+        this.allItemsMap.putAll(this.itemInfoMap);
 
         refreshPage();
     }
@@ -166,12 +175,45 @@ public class CreativeWorkshopScreen extends Screen {
         }
         // 如果当前在收藏夹标签页，标记需要刷新（延迟到 mouseClicked 结束后执行）
         if (this.currentTab == TabButton.FAVORITES) {
-            // 更新 itemInfoMap 以反映收藏状态变化
+            // 更新 itemInfoMap 和 allItemsMap 以反映收藏状态变化
             this.itemInfoMap.clear();
-            this.favoriteItems.forEach(item -> this.itemInfoMap.put(item.name(), item));
+            this.allItemsMap.clear();
+            this.favoriteItems.forEach(item -> {
+                this.itemInfoMap.put(item.name(), item);
+                this.allItemsMap.put(item.name(), item);
+            });
             // 设置刷新标志，让 mouseClicked 在处理完所有事件后刷新
             needsRefresh = true;
         }
+    }
+
+    /**
+     * 根据搜索文本过滤物品列表
+     * @param searchText 搜索文本
+     */
+    private void filterItems(String searchText) {
+        // 重置页码
+        this.page = 0;
+
+        // 如果搜索文本为空，显示所有物品
+        if (searchText.trim().isEmpty()) {
+            this.itemInfoMap.clear();
+            this.itemInfoMap.putAll(this.allItemsMap);
+            refreshPage();
+            return;
+        }
+
+        // 过滤物品：保留名称包含搜索文本的物品（不区分大小写）
+        String lowerSearchText = searchText.toLowerCase();
+        this.itemInfoMap.clear();
+
+        this.allItemsMap.forEach((key, value) -> {
+            if (value.name().toLowerCase().contains(lowerSearchText)) {
+                this.itemInfoMap.put(key, value);
+            }
+        });
+
+        refreshPage();
     }
 
     @Override
