@@ -10,6 +10,6 @@ public class YuushyaOSNetwork {
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(VERSION);
-
+        registrar.playToServer(UploadPayload.TYPE, UploadPayload.STREAM_CODEC, UploadPayload::handle);
     }
 }
