@@ -4,6 +4,7 @@ import com.yuushya.modelling.gui.engrave.EngraveBlockResultLoader;
 import com.yuushya.modelling.gui.engrave.EngraveItemResultLoader;
 import com.yuushya.yuushya_os.YuushyaOS;
 import com.yuushya.yuushya_os.gui.widget.ItemButton;
+import com.yuushya.yuushya_os.util.ClientWorkshopData;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -77,9 +78,7 @@ public class CreativeWorkshopScreen extends Screen {
                 .build();
 
         searchBox = new EditBox(font, widthCenter + WIDTH / 2 - 80, heightCenter - HEIGHT / 2 + 20, 80, BUTTON_HEIGHT, Component.literal("Search..."));
-        searchBox.setResponder(text -> {
-            filterItems(text);
-        });
+        searchBox.setResponder(this::filterItems);
 
         onTabButtonClick(this.currentTab);
 
@@ -140,11 +139,7 @@ public class CreativeWorkshopScreen extends Screen {
     }
 
     private void onServerButtonClick() {
-
-    }
-
-    private void onUploadButtonClick() {
-
+        ClientWorkshopData.getItems().forEach(itemInfo -> this.itemInfoMap.put(itemInfo.name(), itemInfo));
     }
 
     private void refreshPage() {
