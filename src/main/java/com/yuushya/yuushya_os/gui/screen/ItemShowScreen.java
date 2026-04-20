@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.HEIGHT;
 import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.WIDTH;
 
-public class ItemShowScreen extends AbstractYuushyaScreen {
+public class ItemShowScreen extends LayerScreen {
     private final CreativeWorkshopScreen.ItemInfo itemInfo;
 
     public ItemShowScreen(CreativeWorkshopScreen.ItemInfo itemInfo) {

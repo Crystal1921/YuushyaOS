@@ -38,6 +38,7 @@ public class ModLanguage implements DataProvider {
         this.add("yuushya_os.furniture", "Furniture", "家具");
         this.add("yuushya_os.food", "Food", "食物");
 
+        this.add("yuushya_os.calender", "Calendar", "日历");
     }
 
     @Override

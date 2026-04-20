@@ -11,7 +11,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CreativeWorkshopScreen extends Screen {
+public class CreativeWorkshopScreen extends LayerScreen {
     public static final int WIDTH = 320;
     public static final int HEIGHT = 160;
     public static final int BUTTON_INTERVAL = 38;
@@ -45,6 +44,7 @@ public class CreativeWorkshopScreen extends Screen {
 
     @Override
     protected void init() {
+        super.init();
         Minecraft minecraft = Minecraft.getInstance();
         Font font = minecraft.font;
         int widthCenter = this.width / 2;
@@ -223,10 +223,6 @@ public class CreativeWorkshopScreen extends Screen {
         itemButtons.forEach(button -> button.render(guiGraphics, mouseX, mouseY, partialTick));
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
-    }
-
-    @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
     }
 
     @Getter

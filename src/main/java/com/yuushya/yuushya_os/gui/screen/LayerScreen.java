@@ -13,7 +13,7 @@ import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.*;
  * 抽象基类，封装 YuushyaOS GUI 界面的共同行为
  * 使用 NeoForge 的 GUI 层栈管理屏幕切换
  */
-public abstract class AbstractYuushyaScreen extends Screen {
+public abstract class LayerScreen extends Screen {
     protected Minecraft minecraft;
     protected Font font;
     protected int widthCenter;
@@ -24,7 +24,7 @@ public abstract class AbstractYuushyaScreen extends Screen {
      *
      * @param title 界面标题
      */
-    protected AbstractYuushyaScreen(Component title) {
+    protected LayerScreen(Component title) {
         super(title);
     }
 

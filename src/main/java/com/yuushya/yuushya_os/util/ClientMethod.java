@@ -1,12 +1,12 @@
 package com.yuushya.yuushya_os.util;
 
-import com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen;
+import com.yuushya.yuushya_os.gui.screen.MainScreen;
 import net.minecraft.client.Minecraft;
 
 public class ClientMethod {
     public static void openCreativeWorkshopScreen() {
         Minecraft mc = Minecraft.getInstance();
-        CreativeWorkshopScreen guiScreen = new CreativeWorkshopScreen();
-        mc.setScreen(guiScreen);
+        MainScreen mainScreen = new MainScreen();
+        mc.setScreen(mainScreen);
     }
 }

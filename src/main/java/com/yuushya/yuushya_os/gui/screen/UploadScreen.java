@@ -30,7 +30,7 @@ import java.util.List;
 import static com.yuushya.modelling.item.showblocktool.DestroyItem.saveToItem;
 import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.*;
 
-public class UploadScreen extends AbstractYuushyaScreen {
+public class UploadScreen extends LayerScreen {
     EditBox nameEditBox;
     private ItemInfo itemInfo = null;
     private ItemType itemType = ItemType.SHOWBLOCK;
