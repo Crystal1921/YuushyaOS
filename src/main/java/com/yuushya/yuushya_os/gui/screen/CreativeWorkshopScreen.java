@@ -15,7 +15,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.extensions.IMinecraftExtension;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -187,6 +186,7 @@ public class CreativeWorkshopScreen extends Screen {
 
     /**
      * 根据搜索文本过滤物品列表
+     *
      * @param searchText 搜索文本
      */
     private void filterItems(String searchText) {

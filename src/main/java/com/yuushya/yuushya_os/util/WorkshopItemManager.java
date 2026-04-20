@@ -52,7 +52,7 @@ public class WorkshopItemManager {
      */
     public void syncToPlayer(ServerPlayer player) {
         SyncItemsPayload payload = new SyncItemsPayload(new ArrayList<>(items));
-        PacketDistributor.sendToServer(payload);
+        PacketDistributor.sendToPlayer(player, payload);
         YuushyaOS.LOGGER.debug("Synced {} items to player {}", items.size(), player.getName().getString());
     }
 

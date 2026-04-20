@@ -6,7 +6,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.client.extensions.IMinecraftExtension;
 
 import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.*;
 
