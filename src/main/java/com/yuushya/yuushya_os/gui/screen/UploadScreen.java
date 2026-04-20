@@ -35,8 +35,8 @@ public class UploadScreen extends AbstractYuushyaScreen {
     private ItemInfo itemInfo = null;
     private ItemType itemType = ItemType.SHOWBLOCK;
 
-    public UploadScreen(CreativeWorkshopScreen parent) {
-        super(Component.literal("Upload"), parent);
+    public UploadScreen() {
+        super(Component.literal("Upload"));
     }
 
     @Override

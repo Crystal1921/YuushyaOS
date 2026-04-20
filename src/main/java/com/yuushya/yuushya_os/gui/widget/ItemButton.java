@@ -69,7 +69,8 @@ public class ItemButton extends Button {
         if (mouseX >= getX() && mouseX < this.getX() + this.width &&
                 mouseY >= showAreaY && mouseY < showAreaY + ITEM_SIZE) {
             Minecraft mc = Minecraft.getInstance();
-            mc.setScreen(new ItemShowScreen(parent, this.itemInfo));
+            ItemShowScreen screen = new ItemShowScreen(this.itemInfo);
+            mc.pushGuiLayer(screen);
         }
     }
 

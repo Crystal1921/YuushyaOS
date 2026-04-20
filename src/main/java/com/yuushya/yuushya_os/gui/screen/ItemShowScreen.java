@@ -16,8 +16,8 @@ import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.WIDTH;
 public class ItemShowScreen extends AbstractYuushyaScreen {
     private final CreativeWorkshopScreen.ItemInfo itemInfo;
 
-    public ItemShowScreen(CreativeWorkshopScreen parent, CreativeWorkshopScreen.ItemInfo itemInfo) {
-        super(Component.literal("Item Show"), parent);
+    public ItemShowScreen(CreativeWorkshopScreen.ItemInfo itemInfo) {
+        super(Component.literal("Item Show"));
         this.itemInfo = itemInfo;
     }
 

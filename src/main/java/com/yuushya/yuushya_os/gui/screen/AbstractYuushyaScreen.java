@@ -6,14 +6,15 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.client.extensions.IMinecraftExtension;
 
 import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.*;
 
 /**
  * 抽象基类，封装 YuushyaOS GUI 界面的共同行为
+ * 使用 NeoForge 的 GUI 层栈管理屏幕切换
  */
 public abstract class AbstractYuushyaScreen extends Screen {
-    protected final CreativeWorkshopScreen parent;
     protected Minecraft minecraft;
     protected Font font;
     protected int widthCenter;
@@ -22,12 +23,10 @@ public abstract class AbstractYuushyaScreen extends Screen {
     /**
      * 构造函数
      *
-     * @param title  界面标题
-     * @param parent 父界面，可以为 null（对于主界面 CreativeWorkshopScreen）
+     * @param title 界面标题
      */
-    protected AbstractYuushyaScreen(Component title, CreativeWorkshopScreen parent) {
+    protected AbstractYuushyaScreen(Component title) {
         super(title);
-        this.parent = parent;
     }
 
     @Override
@@ -46,11 +45,8 @@ public abstract class AbstractYuushyaScreen extends Screen {
 
     @Override
     public void onClose() {
-        if (parent != null) {
-            minecraft.setScreen(parent);
-        } else {
-            super.onClose();
-        }
+        // 使用 NeoForge 的 GUI 层栈返回上一个屏幕
+        minecraft.popGuiLayer();
     }
 
     @Override

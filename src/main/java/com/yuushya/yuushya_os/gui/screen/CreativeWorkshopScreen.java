@@ -15,6 +15,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.extensions.IMinecraftExtension;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -103,8 +104,10 @@ public class CreativeWorkshopScreen extends Screen {
 
     private void onTabButtonClick(TabButton tabButton) {
         if (tabButton == TabButton.UPLOAD) {
-            Minecraft minecraft = Minecraft.getInstance();
-            minecraft.setScreen(new UploadScreen(this));
+            if (minecraft != null) {
+                UploadScreen screen = new UploadScreen();
+                minecraft.pushGuiLayer(screen);
+            }
             return;
         }
         this.itemInfoMap.clear();
