@@ -39,6 +39,41 @@ public class ModLanguage implements DataProvider {
         this.add("yuushya_os.food", "Food", "食物");
 
         this.add("yuushya_os.calender", "Calendar", "日历");
+
+        // Calendar screen
+        this.add("yuushya_os.calendar.screen.title", "Calendar", "日历");
+        this.add("yuushya_os.calendar.button.previous", "<", "<");
+        this.add("yuushya_os.calendar.button.next", ">", ">");
+        this.add("yuushya_os.calendar.button.today", "Today", "今天");
+        this.add("yuushya_os.calendar.button.confirm", "Confirm", "确认");
+        this.add("yuushya_os.calendar.message.selected_date", "Selected date: %s", "选中: %s");
+        this.add("yuushya_os.calendar.text.selected", "Selected: %s", "选中: %s");
+
+        // Calendar weekdays
+        this.add("yuushya_os.calendar.sunday", "Sun", "日");
+        this.add("yuushya_os.calendar.monday", "Mon", "一");
+        this.add("yuushya_os.calendar.tuesday", "Tue", "二");
+        this.add("yuushya_os.calendar.wednesday", "Wed", "三");
+        this.add("yuushya_os.calendar.thursday", "Thu", "四");
+        this.add("yuushya_os.calendar.friday", "Fri", "五");
+        this.add("yuushya_os.calendar.saturday", "Sat", "六");
+
+        // Calendar months
+        this.add("yuushya_os.calendar.month january", "Jan", "1月");
+        this.add("yuushya_os.calendar.month february", "Feb", "2月");
+        this.add("yuushya_os.calendar.month march", "Mar", "3月");
+        this.add("yuushya_os.calendar.month april", "Apr", "4月");
+        this.add("yuushya_os.calendar.month may", "May", "5月");
+        this.add("yuushya_os.calendar.month june", "Jun", "6月");
+        this.add("yuushya_os.calendar.month july", "Jul", "7月");
+        this.add("yuushya_os.calendar.month august", "Aug", "8月");
+        this.add("yuushya_os.calendar.month september", "Sep", "9月");
+        this.add("yuushya_os.calendar.month october", "Oct", "10月");
+        this.add("yuushya_os.calendar.month november", "Nov", "11月");
+        this.add("yuushya_os.calendar.month december", "Dec", "12月");
+
+        // Month and year format
+        this.add("yuushya_os.calendar.month_year_format", "%s %s", "%s %s年");
     }
 
     @Override

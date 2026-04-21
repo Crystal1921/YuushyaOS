@@ -15,7 +15,7 @@ public class CalenderScreen extends LayerScreen {
     private CalendarWidget calendarWidget;
 
     protected CalenderScreen() {
-        super(Component.literal("Calendar Screen"));
+        super(Component.translatable("yuushya_os.calendar.screen.title"));
     }
 
     @Override
@@ -26,7 +26,7 @@ public class CalenderScreen extends LayerScreen {
         int heightCenter = this.height / 2;
 
         // 计算日历位置（居中）
-        int calendarX = widthCenter - CALENDAR_WIDTH / 2;
+        int calendarX = widthCenter - CALENDAR_WIDTH / 2 - 65;
         int calendarY = heightCenter - HEIGHT / 2 - 10;
 
         // 创建日历组件
@@ -35,26 +35,26 @@ public class CalenderScreen extends LayerScreen {
         // 创建月份导航按钮
         int buttonY = calendarY - BUTTON_HEIGHT - 10;
 
-        Button prevMonthButton = Button.builder(Component.literal("<"), button -> calendarWidget.previousMonth())
-                .bounds(widthCenter - CALENDAR_WIDTH / 2 - BUTTON_HEIGHT * 2, buttonY, BUTTON_HEIGHT, BUTTON_HEIGHT)
+        Button prevMonthButton = Button.builder(Component.translatable("yuushya_os.calendar.button.previous"), button -> calendarWidget.previousMonth())
+                .bounds(calendarX + CELL_SIZE, buttonY, CELL_SIZE, BUTTON_HEIGHT)
                 .build();
 
-        Button nextMonthButton = Button.builder(Component.literal(">"), button -> calendarWidget.nextMonth())
-                .bounds(widthCenter + CALENDAR_WIDTH / 2 + BUTTON_HEIGHT, buttonY, BUTTON_HEIGHT, BUTTON_HEIGHT)
+        Button nextMonthButton = Button.builder(Component.translatable("yuushya_os.calendar.button.next"), button -> calendarWidget.nextMonth())
+                .bounds(calendarX + CELL_SIZE * 5, buttonY, CELL_SIZE, BUTTON_HEIGHT)
                 .build();
 
-        Button todayButton = Button.builder(Component.literal("今天"), button -> calendarWidget.goToToday())
-                .bounds(widthCenter - BUTTON_WIDTH / 2, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT)
+        Button todayButton = Button.builder(Component.translatable("yuushya_os.calendar.button.today"), button -> calendarWidget.goToToday())
+                .bounds(calendarX + (int)(CELL_SIZE * 2.5), buttonY, CELL_SIZE * 2, BUTTON_HEIGHT)
                 .build();
 
         // 确认按钮，显示选中日期
-        Button confirmButton = Button.builder(Component.literal("确认"), button -> {
+        Button confirmButton = Button.builder(Component.translatable("yuushya_os.calendar.button.confirm"), button -> {
                     String selectedDate = calendarWidget.getSelectedDateString();
                     // 这里可以添加处理选中日期的逻辑
-                    minecraft.player.sendSystemMessage(Component.literal("选中的日期: " + selectedDate));
+                    minecraft.player.sendSystemMessage(Component.translatable("yuushya_os.calendar.message.selected_date", selectedDate));
                     onClose();
                 })
-                .bounds(widthCenter - BUTTON_WIDTH, calendarY + CELL_SIZE * 7 + 20, BUTTON_WIDTH * 2, BUTTON_HEIGHT)
+                .bounds(calendarX + (int)(CELL_SIZE * 2.5), calendarY + CELL_SIZE * 7 + 20, CELL_SIZE * 2, BUTTON_HEIGHT)
                 .build();
 
         this.addRenderableWidget(prevMonthButton);
@@ -86,7 +86,7 @@ public class CalenderScreen extends LayerScreen {
         calendarWidget.render(guiGraphics, mouseX, mouseY);
 
         // 绘制选中日期提示
-        String selectedDateText = "选中: " + calendarWidget.getSelectedDateString();
+        String selectedDateText = Component.translatable("yuushya_os.calendar.text.selected", calendarWidget.getSelectedDateString()).getString();
         int textWidth = font.width(selectedDateText);
         guiGraphics.drawString(font, selectedDateText,
                 widthCenter - textWidth / 2,

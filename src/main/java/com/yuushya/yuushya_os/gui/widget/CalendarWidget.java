@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -13,8 +14,35 @@ import java.time.YearMonth;
  * Windows 风格的可点击日历组件
  */
 public class CalendarWidget {
-    // 星期标题
-    private static final String[] WEEK_HEADERS = {"日", "一", "二", "三", "四", "五", "六"};
+    // 星期标题翻译键
+    private static final String[] WEEK_HEADER_KEYS = {
+        "yuushya_os.calendar.sunday",
+        "yuushya_os.calendar.monday",
+        "yuushya_os.calendar.tuesday",
+        "yuushya_os.calendar.wednesday",
+        "yuushya_os.calendar.thursday",
+        "yuushya_os.calendar.friday",
+        "yuushya_os.calendar.saturday"
+    };
+
+    // 月份翻译键
+    private static final String[] MONTH_KEYS = {
+        "yuushya_os.calendar.month january",
+        "yuushya_os.calendar.month february",
+        "yuushya_os.calendar.month march",
+        "yuushya_os.calendar.month april",
+        "yuushya_os.calendar.month may",
+        "yuushya_os.calendar.month june",
+        "yuushya_os.calendar.month july",
+        "yuushya_os.calendar.month august",
+        "yuushya_os.calendar.month september",
+        "yuushya_os.calendar.month october",
+        "yuushya_os.calendar.month november",
+        "yuushya_os.calendar.month december"
+    };
+
+    private static final String MONTH_YEAR_FORMAT_KEY = "yuushya_os.calendar.month_year_format";
+
     // 颜色定义
     private static final int BG_COLOR = 0xFF2D2D30;      // 背景色
     private static final int HEADER_BG_COLOR = 0xFF3C3C3C; // 标题背景色
@@ -24,7 +52,6 @@ public class CalendarWidget {
     private static final int SELECTED_BG_COLOR = 0xFFD9D9D9; // 选中背景色
     private static final int OTHER_MONTH_TEXT_COLOR = 0xFF666666; // 其他月份文本颜色
     private static final int WEEKEND_COLOR = 0xFFFF6B6B; // 周末颜色（淡红）
-    private final Minecraft minecraft;
     private final Font font;
     /**
      * -- GETTER --
@@ -56,7 +83,7 @@ public class CalendarWidget {
     private final LocalDate today;
 
     public CalendarWidget(int x, int y, int cellWidth, int cellHeight) {
-        this.minecraft = Minecraft.getInstance();
+        Minecraft minecraft = Minecraft.getInstance();
         this.font = minecraft.font;
         this.x = x;
         this.y = y;
@@ -82,7 +109,10 @@ public class CalendarWidget {
         drawBorder(guiGraphics, x, y, totalWidth, totalHeight);
 
         // 绘制年月标题
-        String monthTitle = String.format("%d年 %d月", currentMonth.getYear(), currentMonth.getMonthValue());
+        String monthName = Component.translatable(MONTH_KEYS[currentMonth.getMonthValue() - 1]).getString();
+        String year = String.valueOf(currentMonth.getYear());
+        String format = Component.translatable(MONTH_YEAR_FORMAT_KEY).getString();
+        String monthTitle = String.format(format, monthName, year);
         int titleWidth = font.width(monthTitle);
         guiGraphics.drawString(font, monthTitle,
                 x + (totalWidth - titleWidth) / 2,
@@ -93,7 +123,8 @@ public class CalendarWidget {
         for (int i = 0; i < 7; i++) {
             int weekX = x + i * cellWidth;
             int weekY = y + headerHeight;
-            drawCenteredText(guiGraphics, WEEK_HEADERS[i], weekX, weekY, WEEKEND_COLOR, i == 0 || i == 6);
+            String weekHeaderText = Component.translatable(WEEK_HEADER_KEYS[i]).getString();
+            drawCenteredText(guiGraphics, weekHeaderText, weekX, weekY, WEEKEND_COLOR, i == 0 || i == 6);
         }
 
         // 绘制分隔线
@@ -166,7 +197,7 @@ public class CalendarWidget {
         DayOfWeek firstDayOfWeek = firstOfMonth.getDayOfWeek();
         int firstDayIndex = firstDayOfWeek.getValue() % 7;
 
-        LocalDate clickedDate = firstOfMonth.minusDays(firstDayIndex).plusDays(row * 7 + col);
+        LocalDate clickedDate = firstOfMonth.minusDays(firstDayIndex).plusDays(row * 7L + col);
 
         // 更新选中的日期
         selectedDate = clickedDate;
