@@ -2,7 +2,6 @@ package com.yuushya.yuushya_os.gui.screen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -46,10 +45,5 @@ public abstract class LayerScreen extends Screen {
     public void onClose() {
         // 使用 NeoForge 的 GUI 层栈返回上一个屏幕
         minecraft.popGuiLayer();
-    }
-
-    @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        // 默认不渲染背景，子类可以重写
     }
 }

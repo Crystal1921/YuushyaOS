@@ -216,13 +216,13 @@ public class CreativeWorkshopScreen extends LayerScreen {
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
         int widthCenter = this.width / 2;
         int heightCenter = this.height / 2;
         guiGraphics.blit(BG, widthCenter - WIDTH / 2, heightCenter - HEIGHT / 2, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
 
         itemButtons.forEach(button -> button.render(guiGraphics, mouseX, mouseY, partialTick));
 
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 
     @Getter
