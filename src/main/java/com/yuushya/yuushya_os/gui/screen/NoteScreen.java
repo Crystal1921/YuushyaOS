@@ -179,7 +179,7 @@ public class NoteScreen extends LayerScreen{
             minecraft.getConnection().send(new UploadNotePayload(dateStr, serverNoteText));
 
             // 同时更新客户端缓存
-            ClientNoteData.setNote(dateStr, serverNoteText);
+            ClientNoteData.setNote(localDate, serverNoteText);
         }
 
         toggleServerEdit();
@@ -187,8 +187,7 @@ public class NoteScreen extends LayerScreen{
 
     private void loadNotes() {
         // 从客户端缓存加载备注（在玩家加入时已从服务端同步）
-        String dateStr = localDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        serverNoteText = ClientNoteData.getNote(dateStr);
+        serverNoteText = ClientNoteData.getNote(localDate);
 
         // TODO: 从本地配置文件加载本地备注
         localNoteText = "";
