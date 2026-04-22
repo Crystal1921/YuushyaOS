@@ -52,6 +52,7 @@ public class CalendarWidget {
     private static final int SELECTED_BG_COLOR = 0xFFD9D9D9; // 选中背景色
     private static final int OTHER_MONTH_TEXT_COLOR = 0xFF666666; // 其他月份文本颜色
     private static final int WEEKEND_COLOR = 0xFFFF6B6B; // 周末颜色（淡红）
+    private static final int OTHER_MONTH_WEEKEND_COLOR = 0xFFB88888; // 其他月份周末颜色（更淡的红色）
     private final Font font;
     /**
      * -- GETTER --
@@ -124,7 +125,8 @@ public class CalendarWidget {
             int weekX = x + i * cellWidth;
             int weekY = y + headerHeight;
             String weekHeaderText = Component.translatable(WEEK_HEADER_KEYS[i]).getString();
-            drawCenteredText(guiGraphics, weekHeaderText, weekX, weekY, WEEKEND_COLOR, i == 0 || i == 6);
+            int weekColor = (i == 0 || i == 6) ? WEEKEND_COLOR : TEXT_COLOR;
+            drawCenteredText(guiGraphics, weekHeaderText, weekX, weekY, weekColor);
         }
 
         // 绘制分隔线
@@ -161,11 +163,15 @@ public class CalendarWidget {
 
                 // 绘制日期数字
                 String dayText = String.valueOf(currentDate.getDayOfMonth());
-                int textColor = isCurrentMonth ? TEXT_COLOR : OTHER_MONTH_TEXT_COLOR;
+                int textColor;
                 if (isSelected) {
                     textColor = 0xFF000000; // 选中时文字为黑色
+                } else if (isWeekend) {
+                    textColor = isCurrentMonth ? WEEKEND_COLOR : OTHER_MONTH_WEEKEND_COLOR;
+                } else {
+                    textColor = isCurrentMonth ? TEXT_COLOR : OTHER_MONTH_TEXT_COLOR;
                 }
-                drawCenteredText(guiGraphics, dayText, cellX, cellY, textColor, isWeekend);
+                drawCenteredText(guiGraphics, dayText, cellX, cellY, textColor);
 
                 // 绘制单元格边框
                 drawCellBorder(guiGraphics, cellX, cellY);
@@ -235,11 +241,10 @@ public class CalendarWidget {
     /**
      * 绘制居中文本
      */
-    private void drawCenteredText(GuiGraphics guiGraphics, String text, int x, int y, int defaultColor, boolean isWeekend) {
+    private void drawCenteredText(GuiGraphics guiGraphics, String text, int x, int y, int color) {
         int textWidth = font.width(text);
         int textX = x + (cellWidth - textWidth) / 2;
         int textY = y + (cellHeight - font.lineHeight) / 2;
-        int color = isWeekend ? WEEKEND_COLOR : defaultColor;
         guiGraphics.drawString(font, text, textX, textY, color, false);
     }
 

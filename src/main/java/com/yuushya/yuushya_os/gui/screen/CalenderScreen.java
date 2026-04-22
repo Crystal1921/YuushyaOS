@@ -25,7 +25,7 @@ public class CalenderScreen extends LayerScreen {
         int widthCenter = this.width / 2;
         int heightCenter = this.height / 2;
 
-        // 计算日历位置（居中）
+        // 计算日历位置
         int calendarX = widthCenter - CALENDAR_WIDTH / 2 - 65;
         int calendarY = heightCenter - HEIGHT / 2 - 10;
 
@@ -36,15 +36,15 @@ public class CalenderScreen extends LayerScreen {
         int buttonY = calendarY - BUTTON_HEIGHT - 10;
 
         Button prevMonthButton = Button.builder(Component.translatable("yuushya_os.calendar.button.previous"), button -> calendarWidget.previousMonth())
-                .bounds(calendarX + CELL_SIZE, buttonY, CELL_SIZE, BUTTON_HEIGHT)
+                .bounds(calendarX + CELL_SIZE, buttonY + 10, CELL_SIZE, BUTTON_HEIGHT)
                 .build();
 
         Button nextMonthButton = Button.builder(Component.translatable("yuushya_os.calendar.button.next"), button -> calendarWidget.nextMonth())
-                .bounds(calendarX + CELL_SIZE * 5, buttonY, CELL_SIZE, BUTTON_HEIGHT)
+                .bounds(calendarX + CELL_SIZE * 5, buttonY + 10, CELL_SIZE, BUTTON_HEIGHT)
                 .build();
 
         Button todayButton = Button.builder(Component.translatable("yuushya_os.calendar.button.today"), button -> calendarWidget.goToToday())
-                .bounds(calendarX + (int)(CELL_SIZE * 2.5), buttonY, CELL_SIZE * 2, BUTTON_HEIGHT)
+                .bounds(calendarX + (int)(CELL_SIZE * 2.5), buttonY + 10, CELL_SIZE * 2, BUTTON_HEIGHT)
                 .build();
 
         // 确认按钮，显示选中日期
@@ -54,7 +54,7 @@ public class CalenderScreen extends LayerScreen {
                     minecraft.player.sendSystemMessage(Component.translatable("yuushya_os.calendar.message.selected_date", selectedDate));
                     onClose();
                 })
-                .bounds(calendarX + (int)(CELL_SIZE * 2.5), calendarY + CELL_SIZE * 7 + 20, CELL_SIZE * 2, BUTTON_HEIGHT)
+                .bounds(calendarX + (int)(CELL_SIZE * 2.5), calendarY + CELL_SIZE * 7 + 25, CELL_SIZE * 2, BUTTON_HEIGHT)
                 .build();
 
         this.addRenderableWidget(prevMonthButton);
