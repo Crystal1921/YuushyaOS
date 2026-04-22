@@ -1,5 +1,6 @@
 package com.yuushya.yuushya_os.event;
 
+import com.yuushya.yuushya_os.network.UploadNotePayload;
 import com.yuushya.yuushya_os.util.WorkshopItemManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -13,7 +14,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 public class ServerEventHandler {
 
     /**
-     * 当玩家加入服务器时，同步物品列表
+     * 当玩家加入服务器时，同步物品列表和备注数据
      */
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -24,6 +25,9 @@ public class ServerEventHandler {
                 if (manager.getItemCount() > 0) {
                     manager.syncToPlayer(player);
                 }
+
+                // 同步备注数据
+                UploadNotePayload.syncNotesToPlayer(player);
             }
         }
     }

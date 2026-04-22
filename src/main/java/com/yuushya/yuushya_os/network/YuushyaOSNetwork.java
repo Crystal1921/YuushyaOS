@@ -18,5 +18,11 @@ public class YuushyaOSNetwork {
 
         // 服务端 -> 客户端：同步物品列表
         registrar.playToClient(SyncItemsPayload.TYPE, SyncItemsPayload.STREAM_CODEC, SyncItemsPayload::handle);
+
+        // 服务端 -> 客户端：同步备注数据
+        registrar.playToClient(SyncNotePayload.TYPE, SyncNotePayload.STREAM_CODEC, SyncNotePayload::handle);
+
+        // 客户端 -> 服务端：上传/保存备注
+        registrar.playToServer(UploadNotePayload.TYPE, UploadNotePayload.STREAM_CODEC, UploadNotePayload::handle);
     }
 }

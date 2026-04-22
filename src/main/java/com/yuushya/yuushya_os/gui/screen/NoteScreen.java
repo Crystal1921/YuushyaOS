@@ -1,6 +1,8 @@
 package com.yuushya.yuushya_os.gui.screen;
 
 import com.yuushya.yuushya_os.gui.widget.MultiLineTextDisplay;
+import com.yuushya.yuushya_os.network.UploadNotePayload;
+import com.yuushya.yuushya_os.util.ClientNoteData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineEditBox;
@@ -170,16 +172,26 @@ public class NoteScreen extends LayerScreen{
     private void saveServerNote() {
         serverNoteText = serverNoteBox.getValue();
         serverNoteDisplay.setText(serverNoteText);
-        // TODO: 发送到服务器
-        minecraft.player.sendSystemMessage(Component.literal("服务端备注已保存"));
+
+        // 发送到服务器
+        String dateStr = localDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        if (minecraft.getConnection() != null) {
+            minecraft.getConnection().send(new UploadNotePayload(dateStr, serverNoteText));
+
+            // 同时更新客户端缓存
+            ClientNoteData.setNote(dateStr, serverNoteText);
+        }
+
         toggleServerEdit();
     }
 
     private void loadNotes() {
-        // TODO: 从本地配置文件加载备注
-        String dateKey = localDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        // 从客户端缓存加载备注（在玩家加入时已从服务端同步）
+        String dateStr = localDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        serverNoteText = ClientNoteData.getNote(dateStr);
+
+        // TODO: 从本地配置文件加载本地备注
         localNoteText = "";
-        serverNoteText = "";
     }
 
     private void updateButtonStates() {
