@@ -28,7 +28,7 @@ public class CalenderScreen extends LayerScreen {
         int heightCenter = this.height / 2;
 
         // 计算日历位置
-        int calendarX = widthCenter - CALENDAR_WIDTH / 2 - 65;
+        int calendarX = widthCenter - CALENDAR_WIDTH / 2;
         int calendarY = heightCenter - HEIGHT / 2 - 10;
 
         // 创建日历组件

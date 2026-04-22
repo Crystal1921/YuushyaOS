@@ -40,6 +40,13 @@ public class ModLanguage implements DataProvider {
 
         this.add("yuushya_os.calender", "Calendar", "日历");
 
+        // Note screen
+        this.add("yuushya_os.note.title", "Note: %s", "备注: %s");
+        this.add("yuushya_os.note.local", "Local Note", "本地备注");
+        this.add("yuushya_os.note.server", "Server Note", "服务端备注");
+        this.add("yuushya_os.note.button.edit", "Edit", "修改");
+        this.add("yuushya_os.note.button.save", "Save", "保存");
+
         // Calendar screen
         this.add("yuushya_os.calendar.screen.title", "Calendar", "日历");
         this.add("yuushya_os.calendar.button.previous", "<", "<");
