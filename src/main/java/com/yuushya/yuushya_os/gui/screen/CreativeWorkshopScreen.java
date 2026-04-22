@@ -11,6 +11,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -38,8 +39,8 @@ public class CreativeWorkshopScreen extends LayerScreen {
     private TabButton currentTab = TabButton.LOCAL;
     private boolean needsRefresh = false;  // 延迟刷新标志
 
-    public CreativeWorkshopScreen() {
-        super(Component.literal("Creative Workshop"));
+    public CreativeWorkshopScreen(Screen parent) {
+        super(Component.literal("Creative Workshop"), parent);
     }
 
     @Override
@@ -104,8 +105,8 @@ public class CreativeWorkshopScreen extends LayerScreen {
     private void onTabButtonClick(TabButton tabButton) {
         if (tabButton == TabButton.UPLOAD) {
             if (minecraft != null) {
-                UploadScreen screen = new UploadScreen();
-                minecraft.pushGuiLayer(screen);
+                UploadScreen screen = new UploadScreen(this);
+                minecraft.setScreen(screen);
             }
             return;
         }

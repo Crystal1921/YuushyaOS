@@ -3,6 +3,7 @@ package com.yuushya.yuushya_os.gui.screen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -16,8 +17,8 @@ import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.WIDTH;
 public class ItemShowScreen extends LayerScreen {
     private final CreativeWorkshopScreen.ItemInfo itemInfo;
 
-    public ItemShowScreen(CreativeWorkshopScreen.ItemInfo itemInfo) {
-        super(Component.literal("Item Show"));
+    public ItemShowScreen(CreativeWorkshopScreen.ItemInfo itemInfo, Screen parent) {
+        super(Component.literal("Item Show"), parent);
         this.itemInfo = itemInfo;
     }
 

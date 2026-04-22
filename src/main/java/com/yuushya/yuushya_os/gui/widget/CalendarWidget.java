@@ -113,7 +113,7 @@ public class CalendarWidget {
         String monthName = Component.translatable(MONTH_KEYS[currentMonth.getMonthValue() - 1]).getString();
         String year = String.valueOf(currentMonth.getYear());
         String format = Component.translatable(MONTH_YEAR_FORMAT_KEY).getString();
-        String monthTitle = String.format(format, monthName, year);
+        String monthTitle = String.format(format, year, monthName);
         int titleWidth = font.width(monthTitle);
         guiGraphics.drawString(font, monthTitle,
                 x + (totalWidth - titleWidth) / 2,

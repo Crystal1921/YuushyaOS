@@ -12,6 +12,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -35,8 +36,8 @@ public class UploadScreen extends LayerScreen {
     private ItemInfo itemInfo = null;
     private ItemType itemType = ItemType.SHOWBLOCK;
 
-    public UploadScreen() {
-        super(Component.literal("Upload"));
+    public UploadScreen(Screen parent) {
+        super(Component.literal("Upload"), parent);
     }
 
     @Override

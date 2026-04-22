@@ -10,21 +10,23 @@ import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.*;
 
 /**
  * 抽象基类，封装 YuushyaOS GUI 界面的共同行为
- * 使用 NeoForge 的 GUI 层栈管理屏幕切换
  */
 public abstract class LayerScreen extends Screen {
     protected Minecraft minecraft;
     protected Font font;
     protected int widthCenter;
     protected int heightCenter;
+    protected final Screen parent;
 
     /**
      * 构造函数
      *
      * @param title 界面标题
+     * @param parent 父屏幕，关闭时返回到此屏幕
      */
-    protected LayerScreen(Component title) {
+    protected LayerScreen(Component title, Screen parent) {
         super(title);
+        this.parent = parent;
     }
 
     @Override
@@ -43,7 +45,7 @@ public abstract class LayerScreen extends Screen {
 
     @Override
     public void onClose() {
-        // 使用 NeoForge 的 GUI 层栈返回上一个屏幕
-        minecraft.popGuiLayer();
+        // 返回到父屏幕
+        minecraft.setScreen(parent);
     }
 }

@@ -3,10 +3,12 @@ package com.yuushya.yuushya_os.gui.screen;
 import com.yuushya.yuushya_os.gui.widget.CalendarWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
-import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.*;
+import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.BUTTON_HEIGHT;
+import static com.yuushya.yuushya_os.gui.screen.CreativeWorkshopScreen.HEIGHT;
 
 public class CalenderScreen extends LayerScreen {
     private static final int CELL_SIZE = 24;
@@ -14,8 +16,8 @@ public class CalenderScreen extends LayerScreen {
 
     private CalendarWidget calendarWidget;
 
-    protected CalenderScreen() {
-        super(Component.translatable("yuushya_os.calendar.screen.title"));
+    protected CalenderScreen(Screen parent) {
+        super(Component.translatable("yuushya_os.calendar.screen.title"), parent);
     }
 
     @Override
@@ -44,17 +46,14 @@ public class CalenderScreen extends LayerScreen {
                 .build();
 
         Button todayButton = Button.builder(Component.translatable("yuushya_os.calendar.button.today"), button -> calendarWidget.goToToday())
-                .bounds(calendarX + (int)(CELL_SIZE * 2.5), buttonY + 10, CELL_SIZE * 2, BUTTON_HEIGHT)
+                .bounds(calendarX + (int) (CELL_SIZE * 2.5), buttonY + 10, CELL_SIZE * 2, BUTTON_HEIGHT)
                 .build();
 
         // 确认按钮，显示选中日期
         Button confirmButton = Button.builder(Component.translatable("yuushya_os.calendar.button.confirm"), button -> {
-                    String selectedDate = calendarWidget.getSelectedDateString();
-                    // 这里可以添加处理选中日期的逻辑
-                    minecraft.player.sendSystemMessage(Component.translatable("yuushya_os.calendar.message.selected_date", selectedDate));
-                    onClose();
+                    minecraft.setScreen(new NoteScreen(this, calendarWidget.getSelectedDate()));
                 })
-                .bounds(calendarX + (int)(CELL_SIZE * 2.5), calendarY + CELL_SIZE * 7 + 25, CELL_SIZE * 2, BUTTON_HEIGHT)
+                .bounds(calendarX + (int) (CELL_SIZE * 2.5), calendarY + CELL_SIZE * 7 + 25, CELL_SIZE * 2, BUTTON_HEIGHT)
                 .build();
 
         this.addRenderableWidget(prevMonthButton);

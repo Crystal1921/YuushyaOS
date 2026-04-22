@@ -73,7 +73,7 @@ public class ModLanguage implements DataProvider {
         this.add("yuushya_os.calendar.month december", "Dec", "12月");
 
         // Month and year format
-        this.add("yuushya_os.calendar.month_year_format", "%s %s", "%s %s年");
+        this.add("yuushya_os.calendar.month_year_format", "%s %s", "%s年 %s");
     }
 
     @Override

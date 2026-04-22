@@ -45,11 +45,11 @@ public class MainScreen extends Screen {
     }
 
     private void openWorkshopScreen() {
-        Minecraft.getInstance().pushGuiLayer(new CreativeWorkshopScreen());
+        Minecraft.getInstance().setScreen(new CreativeWorkshopScreen(this));
     }
 
     private void openCalenderScreen() {
-        Minecraft.getInstance().pushGuiLayer(new CalenderScreen());
+        Minecraft.getInstance().setScreen(new CalenderScreen(this));
     }
 
     @Override
