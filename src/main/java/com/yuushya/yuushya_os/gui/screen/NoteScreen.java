@@ -3,6 +3,7 @@ package com.yuushya.yuushya_os.gui.screen;
 import com.yuushya.yuushya_os.gui.widget.MultiLineTextDisplay;
 import com.yuushya.yuushya_os.network.UploadNotePayload;
 import com.yuushya.yuushya_os.util.ClientNoteData;
+import com.yuushya.yuushya_os.util.LocalNoteStorage;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineEditBox;
@@ -164,7 +165,8 @@ public class NoteScreen extends LayerScreen{
     private void saveLocalNote() {
         localNoteText = localNoteBox.getValue();
         localNoteDisplay.setText(localNoteText);
-        // TODO: 保存到本地配置文件
+        // 保存到本地配置文件
+        LocalNoteStorage.setNote(localDate, localNoteText);
         minecraft.player.sendSystemMessage(Component.literal("本地备注已保存"));
         toggleLocalEdit();
     }
@@ -199,8 +201,8 @@ public class NoteScreen extends LayerScreen{
         // 从客户端缓存加载备注（在玩家加入时已从服务端同步）
         serverNoteText = ClientNoteData.getNote(localDate);
 
-        // TODO: 从本地配置文件加载本地备注
-        localNoteText = "";
+        // 从本地配置文件加载本地备注
+        localNoteText = LocalNoteStorage.getNote(localDate);
     }
 
     private void updateButtonStates() {
