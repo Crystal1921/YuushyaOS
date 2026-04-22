@@ -1,5 +1,7 @@
 package com.yuushya.yuushya_os.gui.widget;
 
+import com.yuushya.yuushya_os.util.ClientNoteData;
+import com.yuushya.yuushya_os.util.LocalNoteStorage;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -53,6 +55,11 @@ public class CalendarWidget {
     private static final int OTHER_MONTH_TEXT_COLOR = 0xFF666666; // 其他月份文本颜色
     private static final int WEEKEND_COLOR = 0xFFFF6B6B; // 周末颜色（淡红）
     private static final int OTHER_MONTH_WEEKEND_COLOR = 0xFFB88888; // 其他月份周末颜色（更淡的红色）
+
+    // 事项背景颜色
+    private static final int SERVER_NOTE_BG_COLOR = 0xFFFFFF00; // 服务器事项背景色（黄色）
+    private static final int LOCAL_NOTE_BG_COLOR = 0xFF4FC3F7;  // 本地事项背景色（淡蓝色）
+    private static final int BOTH_NOTES_BG_COLOR = 0xFFFF6B6B;  // 同时有本地和服务器事项背景色（红色）
     private final Font font;
     /**
      * -- GETTER --
@@ -154,10 +161,25 @@ public class CalendarWidget {
                 boolean isSelected = currentDate.equals(selectedDate);
                 boolean isWeekend = day == 0 || day == 6;
 
+                // 检查该日期是否有事项
+                boolean hasServerNote = ClientNoteData.hasNote(currentDate);
+                boolean hasLocalNote = LocalNoteStorage.hasNote(currentDate);
+
                 // 绘制单元格背景
                 if (isSelected) {
+                    // 选中的日期优先显示选中背景色
                     guiGraphics.fill(cellX + 2, cellY + 2, cellX + cellWidth - 2, cellY + cellHeight - 2, SELECTED_BG_COLOR);
+                } else if (hasLocalNote && hasServerNote) {
+                    // 两者都有事项显示红色
+                    guiGraphics.fill(cellX + 2, cellY + 2, cellX + cellWidth - 2, cellY + cellHeight - 2, BOTH_NOTES_BG_COLOR);
+                } else if (hasLocalNote) {
+                    // 只有本地事项显示蓝色
+                    guiGraphics.fill(cellX + 2, cellY + 2, cellX + cellWidth - 2, cellY + cellHeight - 2, LOCAL_NOTE_BG_COLOR);
+                } else if (hasServerNote) {
+                    // 只有服务器事项显示黄色
+                    guiGraphics.fill(cellX + 2, cellY + 2, cellX + cellWidth - 2, cellY + cellHeight - 2, SERVER_NOTE_BG_COLOR);
                 } else if (isToday) {
+                    // 今天显示蓝色
                     guiGraphics.fill(cellX + 2, cellY + 2, cellX + cellWidth - 2, cellY + cellHeight - 2, TODAY_BG_COLOR);
                 }
 
