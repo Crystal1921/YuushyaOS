@@ -36,6 +36,7 @@
   "yuushya_os.note.button.edit": "修改",
   "yuushya_os.note.button.save": "保存",
   "yuushya_os.note.local": "本地备注",
+  "yuushya_os.note.permission_denied": "权限不足",
   "yuushya_os.note.saved": "服务端备注已保存！",
   "yuushya_os.note.server": "服务端备注",
   "yuushya_os.note.title": "备注: %s",

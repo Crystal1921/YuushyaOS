@@ -170,19 +170,29 @@ public class NoteScreen extends LayerScreen{
     }
 
     private void saveServerNote() {
-        serverNoteText = serverNoteBox.getValue();
-        serverNoteDisplay.setText(serverNoteText);
+        if (this.minecraft.player != null) {
+            int permissionLevel = this.minecraft.player.getPermissionLevel();
 
-        // 发送到服务器
-        String dateStr = localDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        if (minecraft.getConnection() != null) {
-            minecraft.getConnection().send(new UploadNotePayload(dateStr, serverNoteText));
+            if (permissionLevel < 2) { // 需要OP权限才能编辑服务端备注
+                minecraft.player.sendSystemMessage(Component.translatable("yuushya_os.note.permission_denied"));
+                return;
+            }
 
-            // 同时更新客户端缓存
-            ClientNoteData.setNote(localDate, serverNoteText);
+            serverNoteText = serverNoteBox.getValue();
+            serverNoteDisplay.setText(serverNoteText);
+
+            // 发送到服务器
+            String dateStr = localDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+            if (minecraft.getConnection() != null) {
+                minecraft.getConnection().send(new UploadNotePayload(dateStr, serverNoteText));
+
+                // 同时更新客户端缓存
+                ClientNoteData.setNote(localDate, serverNoteText);
+            }
+
+            toggleServerEdit();
         }
 
-        toggleServerEdit();
     }
 
     private void loadNotes() {
